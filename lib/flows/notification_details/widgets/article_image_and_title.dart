@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:forestvpn_test/config/resources.dart';
 import 'package:forestvpn_test/config/styles.dart';
 import 'package:forestvpn_test/repositories/news/models/article.dart';
+import 'package:forestvpn_test/widgets/image_with_shimmer.dart';
 
 class ArticleImageAndTitle extends StatelessWidget {
   final Article article;
@@ -23,10 +24,18 @@ class ArticleImageAndTitle extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           ClipRRect(
-              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(12),bottomRight: Radius.circular(12)),
-              child: Image.network(article.imageUrl, fit: BoxFit.cover)),
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(12),
+              bottomRight: Radius.circular(12),
+            ),
+            child: ImageWithShimmer(
+              imageUrl: article.imageUrl,
+            ),
+          ),
           ClipRRect(
-            borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(12),bottomRight: Radius.circular(12)),
+            borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(12),
+                bottomRight: Radius.circular(12)),
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1),
               child: Container(

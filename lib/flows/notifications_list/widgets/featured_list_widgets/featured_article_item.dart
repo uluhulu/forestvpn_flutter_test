@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:forestvpn_test/config/styles.dart';
 import 'package:forestvpn_test/repositories/news/models/article.dart';
+import 'package:forestvpn_test/widgets/image_with_shimmer.dart';
 
 import '../../../notification_details/notification_details_page.dart';
 
@@ -27,8 +28,11 @@ class FeaturedArticleItem extends StatelessWidget {
             fit: StackFit.expand,
             children: [
               ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
-                  child: Image.network(article.imageUrl, fit: BoxFit.cover)),
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
+                child: ImageWithShimmer(
+                  imageUrl: article.imageUrl,
+                ),
+              ),
               ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(12)),
                 child: BackdropFilter(
@@ -66,7 +70,7 @@ class FeaturedArticleItem extends StatelessWidget {
   void navigateToNotificationDetailsScreen(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => NotificationDetailsPage(
-              article: article,
+              id: article.id,
             )));
   }
 }

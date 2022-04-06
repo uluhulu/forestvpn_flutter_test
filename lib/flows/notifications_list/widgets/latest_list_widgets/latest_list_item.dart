@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forestvpn_test/config/styles.dart';
 import 'package:forestvpn_test/flows/notification_details/notification_details_page.dart';
+import 'package:forestvpn_test/flows/notifications_list/bloc/notifications_list_bloc.dart';
 import 'package:forestvpn_test/repositories/news/models/article.dart';
 import 'package:forestvpn_test/utils/weekday_returner.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:forestvpn_test/widgets/image_with_shimmer.dart';
 
 class LatestNewsListItem extends StatelessWidget {
   final Article article;
@@ -15,6 +18,7 @@ class LatestNewsListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cubit = BlocProvider.of<NotificationsListBloc>(context);
     return Padding(
       padding: EdgeInsets.only(
         left: 28.w,
@@ -23,25 +27,25 @@ class LatestNewsListItem extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => NotificationDetailsPage(
-                    article: article,
-                  )));
+          cubit.markAsRead(article.id);
+          navigateToNotificationDetailsScreen(context);
         },
         child: Container(
             decoration: BoxDecoration(
-              color: article.readed ? const Color(0x00f5f5f5) : Colors.white,
+              color: article.readed ? const Color(0xfff5f5f5) : Colors.white,
               boxShadow: [
-                const BoxShadow(
-                  color: Colors.white,
-                  blurRadius: 8,
-                  offset: Offset(-4, -4),
-                ),
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 20,
-                  offset: const Offset(4, 4),
-                ),
+                if (!article.readed)
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 20,
+                    offset: const Offset(4, 4),
+                  ),
+                if (article.readed)
+                  const BoxShadow(
+                    color: Color.fromRGBO(0, 0, 0, 0.1),
+                    blurRadius: 20,
+                    offset: Offset(4, 4),
+                  ),
               ],
               borderRadius: const BorderRadius.all(Radius.circular(9)),
             ),
@@ -58,10 +62,12 @@ class LatestNewsListItem extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12.0),
-                    child: Image.network(
-                      article.imageUrl,
+                    child: SizedBox(
                       width: 90.w,
-                      fit: BoxFit.fill,
+                      height: 60.h,
+                      child: ImageWithShimmer(
+                        imageUrl: article.imageUrl,
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -95,5 +101,12 @@ class LatestNewsListItem extends StatelessWidget {
             )),
       ),
     );
+  }
+
+  void navigateToNotificationDetailsScreen(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => NotificationDetailsPage(
+              id: article.id,
+            )));
   }
 }
