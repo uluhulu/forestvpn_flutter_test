@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forestvpn_test/flows/notifications_list/notifications_list_page.dart';
 
 void main() {
   runApp(const ForestVPNTestApp());
@@ -9,13 +10,12 @@ class ForestVPNTestApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'ForestVPN test',
-      home: Scaffold(
-        body: Center(
-          child: Text('News screen'),
-        ),
-      ),
-    );
+    return  MaterialApp(
+          theme: ThemeData(
+            appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
+            brightness: Brightness.light,
+            scaffoldBackgroundColor: Colors.white,
+          ),
+          home: const NotificationListPage());
   }
 }
