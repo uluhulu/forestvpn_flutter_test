@@ -1,5 +1,5 @@
 class Article {
-  const Article({
+   Article({
     required this.id,
     required this.title,
     required this.publicationDate,
@@ -12,6 +12,11 @@ class Article {
   final String title;
   final DateTime publicationDate;
   final String imageUrl;
-  final bool readed;
+   bool readed;
   final String? description;
+
+   @override
+  String toString() {
+    return 'Article{id: $id, title: $title, publicationDate: $publicationDate, imageUrl: $imageUrl, readed: $readed, description: $description}';
+  }
 }
