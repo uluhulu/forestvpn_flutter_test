@@ -23,9 +23,9 @@ class NotificationsListBloc
   final AbstractUsersInteractor newsInteractor;
 
   void _loadArticles(
-    NotificationsListEvent event,
-    Emitter<NotificationsListState> emit,
-  ) async {
+      NotificationsListEvent event,
+      Emitter<NotificationsListState> emit,
+      ) async {
     var featuredArticles = await newsInteractor.getFeaturedArticles();
     var latestArticles = await newsInteractor.getLatestArticles();
     emit(state.copyWith(
@@ -35,12 +35,13 @@ class NotificationsListBloc
   }
 
   void _markAsRead(
-    MarkArticleAsReadEvent event,
-    Emitter<NotificationsListState> emit,
-  ) async {
-    var latestNewsList = state.latestArticles;
+      MarkArticleAsReadEvent event,
+      Emitter<NotificationsListState> emit,
+      ) async {
+    var latestNewsList = List<Article>.from(state.latestArticles);
+
     var index = latestNewsList.indexWhere((element) => element.id == event.id);
-    latestNewsList.elementAt(index).readed = true;
+    latestNewsList[index] = latestNewsList[index].copyWith(readed: true);
 
     emit(
       state.copyWith(
@@ -50,34 +51,22 @@ class NotificationsListBloc
   }
 
   void _markAllAsRead(
-    MarkAllArticlesAsReadEvent event,
-    Emitter<NotificationsListState> emit,
-  ) async {
+      MarkAllArticlesAsReadEvent event,
+      Emitter<NotificationsListState> emit,
+      ) async {
     var latestNewsList = List<Article>.from(state.latestArticles);
-    // var featuredList = List<Article>.from(state.featuredArticles);
-    for (var element in latestNewsList) {
-      element.readed = true;
+
+    for (int i = 0; i < latestNewsList.length; i++) {
+      latestNewsList[i] = latestNewsList[i].copyWith(readed: true);
     }
 
-    // var oldIndex = state.index;
-    // emit(NotificationsListState(
-    //   featuredArticles: featuredList,
-    //   latestArticles: latestNewsList, index: 0,
-    //   // index: state.index,
-    // ));
-    emit(state.copyWith(latestArticles: latestNewsList,));
-    // emit(NotificationsListState(
-    //   featuredArticles: featuredList,
-    //   latestArticles: latestNewsList,
-    //   index: state.index,
-    // ));
-    // emit(NotificationsListState.initial());
+    emit(state.copyWith(latestArticles: latestNewsList));
   }
 
   void _saveCurrentFeaturedIndex(
-    SaveIndexEvent event,
-    Emitter<NotificationsListState> emit,
-  ) async {
+      SaveIndexEvent event,
+      Emitter<NotificationsListState> emit,
+      ) async {
     emit(state.copyWith(index: event.index));
   }
 }

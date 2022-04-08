@@ -18,7 +18,6 @@ class NotificationListForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<NotificationsListBloc, NotificationsListState>(
       builder: (context, state) {
-        print("ass");
         var bloc = BlocProvider.of<NotificationsListBloc>(context);
         return Container(
           color: Colors.white,

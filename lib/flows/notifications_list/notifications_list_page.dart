@@ -18,6 +18,6 @@ class NotificationListPage extends StatelessWidget {
         minTextAdapt: true,
         orientation: Orientation.portrait);
 
-    return NotificationListForm();
+    return const NotificationListForm();
   }
 }
