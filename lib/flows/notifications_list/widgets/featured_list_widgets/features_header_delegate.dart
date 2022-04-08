@@ -21,7 +21,7 @@ class FeaturesHeaderDelegate extends SliverPersistentHeaderDelegate {
     bool overlapsContent,
   ) {
     final progress = min(1, shrinkOffset / (maxExtent - minExtent)).toDouble();
-    var cubit = BlocProvider.of<NotificationsListBloc>(context);
+    var bloc = BlocProvider.of<NotificationsListBloc>(context);
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -51,7 +51,11 @@ class FeaturesHeaderDelegate extends SliverPersistentHeaderDelegate {
                   itemCount: articlesList.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    cubit.saveCurrentFeaturedIndex(index);
+                    bloc.add(
+                      SaveIndexEvent(
+                        index: index,
+                      ),
+                    );
                     return FeaturedArticleItem(
                       article: articlesList[index],
                     );

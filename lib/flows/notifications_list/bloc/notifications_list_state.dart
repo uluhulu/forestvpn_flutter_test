@@ -1,31 +1,37 @@
 part of 'notifications_list_bloc.dart';
 
-class NotificationsListState {
-  final List<Article> featuredArticles;
+class NotificationsListState extends Equatable {
   final List<Article> latestArticles;
+  final List<Article> featuredArticles;
   final int index;
 
   NotificationsListState.initial()
-      : featuredArticles = [],
-        latestArticles = [],
+      : latestArticles = [],
+        featuredArticles = [],
         index = 0;
 
-  NotificationsListState({
-    required this.featuredArticles,
+  const NotificationsListState({
     required this.latestArticles,
+    required this.featuredArticles,
     required this.index,
   });
 
   NotificationsListState copyWith({
-    List<Article>? featuredArticles,
     List<Article>? latestArticles,
+    List<Article>? featuredArticles,
     int? index,
   }) {
     return NotificationsListState(
+      index: index ?? this.index,
       featuredArticles: featuredArticles ?? this.featuredArticles,
       latestArticles: latestArticles ?? this.latestArticles,
-      index: index ?? this.index,
     );
   }
-}
 
+  @override
+  List<Object?> get props => [
+        latestArticles,
+        featuredArticles,
+        index,
+      ];
+}
