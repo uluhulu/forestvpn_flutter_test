@@ -18,7 +18,7 @@ class LatestNewsListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var cubit = BlocProvider.of<NotificationsListBloc>(context);
+    var bloc = BlocProvider.of<NotificationsListBloc>(context);
     return Padding(
       padding: EdgeInsets.only(
         left: 28.w,
@@ -27,7 +27,9 @@ class LatestNewsListItem extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-          cubit.markAsRead(article.id);
+          bloc.add(
+            MarkArticleAsReadEvent(id: article.id),
+          );
           navigateToNotificationDetailsScreen(context);
         },
         child: Container(

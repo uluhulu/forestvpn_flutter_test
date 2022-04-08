@@ -12,13 +12,14 @@ import 'package:forestvpn_test/flows/notifications_list/widgets/title.dart';
 import '../../config/app_string.dart';
 
 class NotificationListForm extends StatelessWidget {
-  const NotificationListForm({Key? key}) : super(key: key);
+   const NotificationListForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NotificationsListBloc, NotificationsListState>(
       builder: (context, state) {
-        var cubit = BlocProvider.of<NotificationsListBloc>(context);
+        print("ass");
+        var bloc = BlocProvider.of<NotificationsListBloc>(context);
         return Container(
           color: Colors.white,
           child: SafeArea(
@@ -43,7 +44,7 @@ class NotificationListForm extends StatelessWidget {
                       style: AppTextStyles.headline3Black18,
                     ),
                     onPressed: () {
-                      cubit.markAllAsRead();
+                      bloc.add(MarkAllArticlesAsReadEvent());
                     },
                   ),
                 ],

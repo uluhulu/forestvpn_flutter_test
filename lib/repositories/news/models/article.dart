@@ -1,5 +1,7 @@
+import 'package:equatable/equatable.dart';
+
 class Article {
-   Article({
+  Article({
     required this.id,
     required this.title,
     required this.publicationDate,
@@ -12,10 +14,10 @@ class Article {
   final String title;
   final DateTime publicationDate;
   final String imageUrl;
-   bool readed;
+  bool readed;
   final String? description;
 
-   @override
+  @override
   String toString() {
     return 'Article{id: $id, title: $title, publicationDate: $publicationDate, imageUrl: $imageUrl, readed: $readed, description: $description}';
   }

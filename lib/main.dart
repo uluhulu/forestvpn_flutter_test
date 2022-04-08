@@ -19,7 +19,11 @@ class ForestVPNTestApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<NotificationsListBloc>(
-          create: (context) => GetIt.instance.get<NotificationsListBloc>(),
+          create: (context) {
+            final bloc = GetIt.instance.get<NotificationsListBloc>();
+            bloc.add(LoadArticlesEvent());
+            return bloc;
+          },
         )
       ],
       child: MaterialApp(

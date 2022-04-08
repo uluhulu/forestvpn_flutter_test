@@ -3,19 +3,29 @@ import 'package:forestvpn_test/repositories/news/models/article.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../interactors/news/abstract_news_interactor.dart';
+import 'package:equatable/equatable.dart';
 
 part 'notifications_list_state.dart';
 
+part 'notifications_list_event.dart';
+
 @singleton
-class NotificationsListBloc extends Cubit<NotificationsListState> {
+class NotificationsListBloc
+    extends Bloc<NotificationsListEvent, NotificationsListState> {
   NotificationsListBloc({required this.newsInteractor})
       : super(NotificationsListState.initial()) {
-    loadArticles();
+    on<LoadArticlesEvent>(_loadArticles);
+    on<MarkArticleAsReadEvent>(_markAsRead);
+    on<MarkAllArticlesAsReadEvent>(_markAllAsRead);
+    on<SaveIndexEvent>(_saveCurrentFeaturedIndex);
   }
 
   final AbstractUsersInteractor newsInteractor;
 
-  Future loadArticles() async {
+  void _loadArticles(
+    NotificationsListEvent event,
+    Emitter<NotificationsListState> emit,
+  ) async {
     var featuredArticles = await newsInteractor.getFeaturedArticles();
     var latestArticles = await newsInteractor.getLatestArticles();
     emit(state.copyWith(
@@ -24,24 +34,50 @@ class NotificationsListBloc extends Cubit<NotificationsListState> {
     ));
   }
 
-  Future markAsRead(
-    String id,
+  void _markAsRead(
+    MarkArticleAsReadEvent event,
+    Emitter<NotificationsListState> emit,
   ) async {
     var latestNewsList = state.latestArticles;
-    var index = latestNewsList.indexWhere((element) => element.id == id);
+    var index = latestNewsList.indexWhere((element) => element.id == event.id);
     latestNewsList.elementAt(index).readed = true;
-    emit(state.copyWith(latestArticles: latestNewsList));
+
+    emit(
+      state.copyWith(
+        latestArticles: latestNewsList,
+      ),
+    );
   }
 
-  Future markAllAsRead() async {
-    var latestNewsList = state.latestArticles;
+  void _markAllAsRead(
+    MarkAllArticlesAsReadEvent event,
+    Emitter<NotificationsListState> emit,
+  ) async {
+    var latestNewsList = List<Article>.from(state.latestArticles);
+    // var featuredList = List<Article>.from(state.featuredArticles);
     for (var element in latestNewsList) {
       element.readed = true;
     }
-    emit(state.copyWith(latestArticles: latestNewsList));
+
+    // var oldIndex = state.index;
+    // emit(NotificationsListState(
+    //   featuredArticles: featuredList,
+    //   latestArticles: latestNewsList, index: 0,
+    //   // index: state.index,
+    // ));
+    emit(state.copyWith(latestArticles: latestNewsList,));
+    // emit(NotificationsListState(
+    //   featuredArticles: featuredList,
+    //   latestArticles: latestNewsList,
+    //   index: state.index,
+    // ));
+    // emit(NotificationsListState.initial());
   }
 
-  Future saveCurrentFeaturedIndex(int index) async {
-    emit(state.copyWith(index: index));
+  void _saveCurrentFeaturedIndex(
+    SaveIndexEvent event,
+    Emitter<NotificationsListState> emit,
+  ) async {
+    emit(state.copyWith(index: event.index));
   }
 }
